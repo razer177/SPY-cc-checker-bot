@@ -1,5 +1,6 @@
 import os
 import requests
+import datetime
 from flask import Flask, request, jsonify
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
@@ -14,13 +15,11 @@ WEBHOOK_URL = os.getenv("WEBHOOK_URL")
 if not BOT_TOKEN:
     raise ValueError("❌ TELEGRAM_BOT_TOKEN not set!")
 
-if not WEBHOOK_URL:
-    print("⚠️ WEBHOOK_URL not set. Using polling mode instead of webhook.")
-
 # Create Flask app
 app = Flask(__name__)
+start_time = datetime.datetime.now()
 
-# Create Telegram app
+# Create Telegram bot application
 telegram_app = ApplicationBuilder().token(BOT_TOKEN).build()
 
 # === Telegram Handlers ===
@@ -54,7 +53,19 @@ telegram_app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, check_c
 
 @app.route("/")
 def home():
-    return "✅ CC Checker Bot is online and ready!"
+    uptime = datetime.datetime.now() - start_time
+    return f"""
+    <html>
+        <head><title>CC Checker Bot Status</title></head>
+        <body style='font-family: Arial; background:#f8f9fa; text-align:center; margin-top:50px;'>
+            <h1>✅ CC Checker Bot is Online!</h1>
+            <p><b>Bot Token:</b> {BOT_TOKEN[:8]}********</p>
+            <p><b>Webhook URL:</b> {WEBHOOK_URL or 'Polling Mode'}</p>
+            <p><b>Uptime:</b> {uptime}</p>
+            <p>📅 Started at: {start_time.strftime('%Y-%m-%d %H:%M:%S')}</p>
+        </body>
+    </html>
+    """
 
 @app.route(f"/{BOT_TOKEN}", methods=["POST"])
 def webhook():
@@ -67,19 +78,16 @@ def set_webhook():
     if not WEBHOOK_URL:
         return "❌ Set WEBHOOK_URL environment variable first", 400
 
-    s = telegram_app.bot.set_webhook(f"{WEBHOOK_URL}/{BOT_TOKEN}")
-    if s:
-        return f"✅ Webhook set to {WEBHOOK_URL}/{BOT_TOKEN}"
-    else:
-        return "❌ Failed to set webhook", 500
+    success = telegram_app.bot.set_webhook(f"{WEBHOOK_URL}/{BOT_TOKEN}")
+    if success:
+        return f"✅ Webhook set successfully: {WEBHOOK_URL}/{BOT_TOKEN}"
+    return "❌ Failed to set webhook", 500
 
 
 if __name__ == "__main__":
     if WEBHOOK_URL:
-        # Run Flask with webhook mode
-        print(f"🌐 Running with webhook: {WEBHOOK_URL}/{BOT_TOKEN}")
-        app.run(host="0.0.0.0", port=5000)
+        print(f"🌐 Running Flask server with webhook on port 8080: {WEBHOOK_URL}/{BOT_TOKEN}")
+        app.run(host="0.0.0.0", port=8080)
     else:
-        # Run bot directly with polling mode
-        print("🤖 Running with polling mode (no webhook URL set)...")
+        print("🤖 Running bot in polling mode on port 8080...")
         telegram_app.run_polling()
