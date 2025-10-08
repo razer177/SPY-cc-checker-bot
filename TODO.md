@@ -1,0 +1,3 @@
+- [x] Fix getenv key in cc.py from "8009472752:AAG9WFdRtRF0cOiFASHZ8tLC45d2Y1mVVqs" to "TELEGRAM_BOT_TOKEN"
+- [x] Create .env file with TELEGRAM_BOT_TOKEN=8009472752:AAG9WFdRtRF0cOiFASHZ8tLC45d2Y1mVVqs
+- [x] Run python -u cc.py to test
