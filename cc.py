@@ -2,7 +2,7 @@ import os
 import requests
 import datetime
 from flask import Flask, request, jsonify
-from telegram import Update
+# from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
 from dotenv import load_dotenv
 
