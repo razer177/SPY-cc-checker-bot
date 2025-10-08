@@ -5,7 +5,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, Con
 from dotenv import load_dotenv
 
 load_dotenv()
-BOT_TOKEN = os.getenv("8009472752:AAG9WFdRtRF0cOiFASHZ8tLC45d2Y1mVVqs")
+BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
 if not BOT_TOKEN:
     raise ValueError("❌ TELEGRAM_BOT_TOKEN not set!")
