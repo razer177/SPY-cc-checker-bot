@@ -1,4 +1,4 @@
-# 🔐 Telegram Security Edu Bot (Educational)
+# 🔐 SPYCC CHECKER BOT (Educational)
 
 > **Important:** This repository is an *educational* project meant to teach about payment-card data formats, basic validation (Luhn algorithm), and secure handling practices. **Do NOT use real, live card numbers, credentials, or other sensitive data** while testing. Always use test/dummy data provided by payment processors for development and learning purposes.
 
